@@ -1,0 +1,69 @@
+# Node
+node_modules/
+
+# Build outputs
+build/
+dist/
+.out/
+.next/
+.nuxt/
+coverage/
+.tmp/
+.temp/
+.eslintcache
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Env files
+.env
+.env.*
+*.env
+*.env.*
+
+# Prisma
+backend/prisma/dev.db
+backend/prisma/dev.db-journal
+backend/prisma/*.db
+backend/prisma/*.db-journal
+backend/prisma/migrations/**/migration_lock.toml
+
+# NestJS
+backend/dist/
+backend/.nestjs-cache/
+
+# Vite
+client/dist/
+client/.vite/
+
+# TypeScript
+*.tsbuildinfo
+
+# IDEs and editors
+.vscode/
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Docker
+**/.docker/
+**/docker/*.local*
+
+# Misc
+*.local
+.cache/
+.sass-cache/
+
+# Prisma (root-level too)
+prisma/*.db
+prisma/*.db-journal
+prisma/migrations/**/migration_lock.toml
+
+# Common local/dev tools
+.envrc
+.turbo/
+.vercel/

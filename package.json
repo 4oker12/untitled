@@ -1,0 +1,27 @@
+{
+  "name": "your-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npm run dev -w backend || npm --prefix backend run dev",
+    "build": "npm run build -w backend || npm --prefix backend run build",
+    "migrate": "npm --prefix backend run prisma:migrate",
+    "seed": "npm --prefix backend run prisma:seed",
+    "client:dev": "npm --prefix client run dev",
+    "client:build": "npm --prefix client run build"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.35.0",
+    "@types/node": "20.14.10",
+    "@typescript-eslint/eslint-plugin": "^8.42.0",
+    "@typescript-eslint/parser": "^8.42.0",
+    "eslint": "^9.35.0",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-plugin-import-x": "^4.16.1",
+    "prettier": "3.3.3",
+    "typescript": "^5.9.2"
+  }
+}
