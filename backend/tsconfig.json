@@ -4,8 +4,12 @@
     "outDir": "dist",
     "rootDir": "src",
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
   "include": ["src"],
-  "exclude": ["node_modules", "dist", "test", "**/*.spec.ts", "prisma"]
+  "exclude": ["node_modules", "dist", "test", "**/*.spec.ts", "prisma", "../client"]
 }

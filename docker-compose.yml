@@ -18,19 +18,10 @@ services:
       - DATABASE_URL=${DATABASE_URL}
       - PORT=4001
       - COMMON_JWT_SECRET=${COMMON_JWT_SECRET}
+      - FRONTEND_URL=${FRONTEND_URL}
     ports:
       - '4001:4001'
     depends_on:
       - db
-  bff:
-    build: ./bff
-    env_file: ./.env
-    environment:
-      - BFF_PORT=4000
-      - BACKEND_GRAPHQL_URL=http://backend:4001/graphql
-    ports:
-      - '4000:4000'
-    depends_on:
-      - backend
 volumes:
   db_data:

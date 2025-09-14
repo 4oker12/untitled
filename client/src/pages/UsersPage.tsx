@@ -1,4 +1,5 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
+import { useQuery, useQueryClient, keepPreviousData } from '@tanstack/react-query'
 import { getUsers } from '@/lib/api'
 import { Spinner } from '@/components/ui/Spinner'
 import { ErrorBanner } from '@/components/ui/ErrorBanner'
@@ -15,7 +16,7 @@ export function UsersPage() {
   const query = useQuery({
     queryKey: ['users', { skip, take }],
     queryFn: () => getUsers({ skip, take }),
-    keepPreviousData: true,
+    placeholderData: keepPreviousData(),
   })
 
   const total = query.data?.total ?? 0
@@ -86,5 +87,3 @@ export function UsersPage() {
     </div>
   )
 }
-
-import { useState } from 'react'

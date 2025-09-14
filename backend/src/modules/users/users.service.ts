@@ -4,9 +4,11 @@ import { PrismaService } from '../../common/prisma.service';
 import { UsersQueryDto } from './dto/users-query.dto';
 import { UserDto } from './dto/user.dto';
 
+import { Role } from './models/role.enum';
+
 const DEMO_USERS: UserDto[] = [
-  { id: 1, email: 'demo1@example.com', name: 'Demo One', createdAt: new Date(0).toISOString() },
-  { id: 2, email: 'demo2@example.com', name: 'Demo Two', createdAt: new Date(0).toISOString() },
+  { id: 1, email: 'demo1@example.com', name: 'Demo One', role: Role.USER, createdAt: new Date(0).toISOString() },
+  { id: 2, email: 'demo2@example.com', name: 'Demo Two', role: Role.ADMIN, createdAt: new Date(0).toISOString() },
 ];
 
 function isTableMissing(err: unknown): boolean {
@@ -18,10 +20,16 @@ function isTableMissing(err: unknown): boolean {
 }
 
 // Prisma payload type for conversion when DB is available
- type PrismaUser = Prisma.UserGetPayload<{ select: { id: true; email: true; name: true; createdAt: true } }>;
+ type PrismaUser = Prisma.UserGetPayload<{ select: { id: true; email: true; name: true; role: true; createdAt: true } }>;
 
 function toDto(u: PrismaUser): UserDto {
-  return { id: Number(u.id as unknown as number), email: u.email, name: u.name ?? null, createdAt: new Date(u.createdAt).toISOString() };
+  return {
+    id: Number(u.id as unknown as number),
+    email: u.email,
+    name: u.name ?? null,
+    role: u.role as any, // Cast to Role enum
+    createdAt: new Date(u.createdAt).toISOString()
+  };
 }
 
 @Injectable()
@@ -51,7 +59,7 @@ export class UsersService {
           orderBy: { [orderField || 'id']: (orderDir || 'asc') as any },
           skip,
           take,
-          select: { id: true, email: true, name: true, createdAt: true },
+          select: { id: true, email: true, name: true, role: true, createdAt: true },
         }),
       ]);
 
@@ -83,7 +91,7 @@ export class UsersService {
     try {
       const user = await this.prisma.user.findUnique({
         where: { id: Number(id) },
-        select: { id: true, email: true, name: true, createdAt: true },
+        select: { id: true, email: true, name: true, role: true, createdAt: true },
       });
       if (!user) return null;
       return toDto(user);

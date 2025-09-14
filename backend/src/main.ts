@@ -6,6 +6,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { GlobalHttpExceptionFilter } from './common/http-exception.filter';
 import { exec } from 'node:child_process';
 import { platform } from 'node:os';
+import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
 
 function getConfiguredPort(): number {
   const raw = process.env.PORT;
@@ -70,7 +72,16 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // Enable CORS for future frontend consumption
-  app.enableCors({ origin: true, credentials: true });
+  app.enableCors({
+    origin: ['http://localhost:5173', 'http://localhost:3000', process.env.FRONTEND_URL].filter(Boolean) as string[],
+    credentials: true
+  });
+
+  // Use cookie-parser middleware
+  app.use(cookieParser());
+
+  // Use helmet middleware for security headers
+  app.use(helmet({ crossOriginResourcePolicy: false }));
 
   // Global validation and error filter
   app.useGlobalPipes(
