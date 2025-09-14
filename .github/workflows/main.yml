@@ -8,7 +8,6 @@ jobs:
     defaults:
       run:
         working-directory: backend
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -27,8 +26,11 @@ jobs:
           --to-schema-datamodel prisma/schema.prisma
           --script > migration.sql
 
+      # безопасный вывод пути без $GITHUB_WORKSPACE
       - name: Print SQL path
-        run: echo "SQL path: $GITHUB_WORKSPACE/backend/migration.sql"
+        run: |
+          echo "SQL path: $(pwd)/migration.sql"
+          test -f migration.sql || (echo "migration.sql not found" && exit 1)
 
       - name: Install psql client
         run: sudo apt-get update && sudo apt-get install -y postgresql-client
