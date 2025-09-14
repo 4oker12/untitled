@@ -2,26 +2,54 @@
   "name": "your-app",
   "private": true,
   "type": "module",
+  "workspaces": [
+    "backend",
+    "client"
+  ],
   "scripts": {
-    "dev": "npm run dev -w backend || npm --prefix backend run dev",
-    "build": "npm run build -w backend || npm --prefix backend run build",
-    "migrate": "npm --prefix backend run prisma:migrate",
-    "seed": "npm --prefix backend run prisma:seed",
-    "client:dev": "npm --prefix client run dev",
-    "client:build": "npm --prefix client run build"
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:client\"",
+    "dev:backend": "npm run dev -w backend",
+    "dev:client": "npm run dev -w client",
+    "build": "npm run -ws build",
+    "build:backend": "npm run build -w backend",
+    "build:client": "npm run build -w client",
+    "start": "npm run start:backend",
+    "start:backend": "npm run start:prod -w backend",
+    "start:client": "npm run preview -w client",
+    "test": "npm run -ws --if-present test",
+    "typecheck": "tsc --noEmit",
+    "typecheck:backend": "tsc --noEmit -p backend/tsconfig.json",
+    "typecheck:client": "tsc --noEmit -p client/tsconfig.json",
+    "typecheck:all": "npm run -ws --if-present typecheck",
+    "lint": "eslint .",
+    "lint:all": "npm run -ws --if-present lint",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "format:all": "npm run -ws --if-present format",
+    "format:check:all": "npm run -ws --if-present format:check",
+    "clean": "rimraf backend/dist client/dist",
+    "migrate": "npm run prisma:migrate -w backend",
+    "generate": "npm run prisma:generate -w backend",
+    "seed": "npm run prisma:seed -w backend"
   },
   "engines": {
     "node": ">=20"
   },
   "devDependencies": {
     "@eslint/js": "^9.35.0",
+    "@types/cookie-parser": "^1.4.9",
     "@types/node": "20.14.10",
+    "@types/passport-local": "^1.0.38",
     "@typescript-eslint/eslint-plugin": "^8.42.0",
     "@typescript-eslint/parser": "^8.42.0",
+    "@your-app/backend": "file:backend",
+    "concurrently": "^8.2.2",
     "eslint": "^9.35.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-import-x": "^4.16.1",
     "prettier": "3.3.3",
     "typescript": "^5.9.2"
-  }
+  },
+  "dependencies": {}
 }

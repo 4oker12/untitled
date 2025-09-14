@@ -3,7 +3,9 @@
 # ------------------------------------------------------
 
 type AuthPayload {
-  token: String!
+  accessToken: String!
+  refreshToken: String!
+  user: User!
 }
 
 """
@@ -11,13 +13,32 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+input LoginInput {
+  email: String!
+  password: String!
+}
+
 type Mutation {
-  login(email: String!): AuthPayload!
+  login(input: LoginInput!): AuthPayload!
+  logout: Boolean!
+  refreshTokens(refreshToken: String!): TokenPair!
 }
 
 type Query {
+  me: User
   user(id: ID!): User
   usersQuery: [User!]!
+}
+
+"""User role for authorization"""
+enum Role {
+  ADMIN
+  USER
+}
+
+type TokenPair {
+  accessToken: String!
+  refreshToken: String!
 }
 
 type User {
@@ -25,4 +46,5 @@ type User {
   email: String!
   id: ID!
   name: String
+  role: Role!
 }

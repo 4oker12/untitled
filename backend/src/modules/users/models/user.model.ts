@@ -1,4 +1,5 @@
 import { ObjectType, Field, ID, GraphQLISODateTime } from '@nestjs/graphql';
+import { Role } from './role.enum';
 
 @ObjectType()
 export class User {
@@ -10,6 +11,9 @@ export class User {
 
   @Field(() => String, { nullable: true })
   name?: string | null;
+
+  @Field(() => Role)
+  role!: Role;
 
   @Field(() => GraphQLISODateTime)
   createdAt!: Date;
