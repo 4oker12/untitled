@@ -1,5 +1,6 @@
 name: Apply Prisma migrations
-on: workflow_dispatch
+on:
+  workflow_dispatch:
 
 jobs:
   migrate:
@@ -7,20 +8,27 @@ jobs:
     defaults:
       run:
         working-directory: backend
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '20'
 
       - name: Install deps
         run: npm ci
 
       - name: Generate SQL from schema (no DB connection)
-        run: npx prisma migrate diff --from-empty --to-schema-datamodel prisma/schema.prisma --script > migration.sql
+        run: >
+          npx prisma migrate diff --from-empty
+          --to-schema-datamodel prisma/schema.prisma
+          --script > migration.sql
 
-      - name: Show SQL path
-        run: echo "SQL path: $PWD/migration.sql"
+      - name: Print SQL path
+        run: echo "SQL path: $GITHUB_WORKSPACE/backend/migration.sql"
 
       - name: Install psql client
         run: sudo apt-get update && sudo apt-get install -y postgresql-client
@@ -28,7 +36,9 @@ jobs:
       - name: Verify DIRECT_URL secret is set
         run: |
           if [ -z "${{ secrets.DIRECT_URL }}" ]; then
-            echo "ERROR: GitHub secret DIRECT_URL is missing"; exit 1; fi
+            echo "ERROR: GitHub secret DIRECT_URL is missing"
+            exit 1
+          fi
 
       - name: Apply SQL to Postgres
         env:
